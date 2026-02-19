@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rnano Designer</title>
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-5">
+
+<div class="container">
+  <h2 class="mb-4">Rnano Designer Form</h2>
+  <form action="submit.php" method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+
+    <!-- siRNA 文件上传 -->
+    <div class="mb-3">
+      <label for="sirna_file" class="form-label">siRNA File</label>
+      <input class="form-control" type="file" id="sirna_file" name="sirna_file" required>
+    </div>
+
+    <!-- Shape -->
+    <div class="mb-3">
+      <label for="shape" class="form-label">Shape</label>
+      <select class="form-select" id="shape" name="shape" required>
+        <option value="">-- Select Shape --</option>
+        <option value="triangle">Triangle</option>
+        <option value="square">Square</option>
+        <option value="pentagon">Pentagon</option>
+        <option value="hexagon">Hexagon</option>
+        <option value="3wj">Three Way Junction</option>
+      </select>
+    </div>
+
+    <hr>
+    <h5>Common Parameters</h5>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="output_filename" class="form-label">Output Filename</label>
+        <input type="text" class="form-control" id="output_filename" name="output_filename" value="output">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="output_format" class="form-label">Output Format</label>
+        <select class="form-select" id="output_format" name="output_format">
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="quantity" class="form-label">Quantity (-q)</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" value="10">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="max_quantity" class="form-label">Max Quantity (-m)</label>
+        <input type="number" class="form-control" id="max_quantity" name="max_quantity" value="100">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="substitute_ratio" class="form-label">Substitute Ratio (-r)</label>
+        <input type="number" step="0.01" class="form-control" id="substitute_ratio" name="substitute_ratio" value="0">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="processes" class="form-label">Processes (-p)</label>
+        <input type="number" class="form-control" id="processes" name="processes" value="8">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="min_mfe" class="form-label">Min MFE</label>
+        <input type="number" step="0.01" class="form-control" id="min_mfe" name="min_mfe">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="max_mfe" class="form-label">Max MFE</label>
+        <input type="number" step="0.01" class="form-control" id="max_mfe" name="max_mfe">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="min_mfe_frequency" class="form-label">Min MFE Frequency</label>
+        <input type="number" step="0.01" class="form-control" id="min_mfe_frequency" name="min_mfe_frequency">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="max_mfe_frequency" class="form-label">Max MFE Frequency</label>
+        <input type="number" step="0.01" class="form-control" id="max_mfe_frequency" name="max_mfe_frequency">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="min_mfe_diversity" class="form-label">Min MFE Diversity</label>
+        <input type="number" step="0.01" class="form-control" id="min_mfe_diversity" name="min_mfe_diversity">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="max_mfe_diversity" class="form-label">Max MFE Diversity</label>
+        <input type="number" step="0.01" class="form-control" id="max_mfe_diversity" name="max_mfe_diversity">
+      </div>
+    </div>
+
+    <hr>
+    <h5>Shape-specific Parameters</h5>
+
+    <!-- 动态加载区域 -->
+    <div id="shape-params"></div>
+
+    <!-- 提交按钮 -->
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
+</div>
+
+<script>
+  const shapeParams = {
+    triangle: `
+      <div class="mb-3">
+        <label for="gc_clasp_length" class="form-label">GC Clasp Length</label>
+        <input type="number" class="form-control" id="gc_clasp_length" name="gc_clasp_length">
+      </div>
+      <div class="mb-3">
+        <label for="overhang_length" class="form-label">Overhang Length</label>
+        <input type="number" class="form-control" id="overhang_length" name="overhang_length">
+      </div>
+    `,
+    square: `
+      <div class="mb-3">
+        <label for="gc_clasp_length" class="form-label">GC Clasp Length</label>
+        <input type="number" class="form-control" id="gc_clasp_length" name="gc_clasp_length">
+      </div>
+      <div class="mb-3">
+        <label for="overhang_length" class="form-label">Overhang Length</label>
+        <input type="number" class="form-control" id="overhang_length" name="overhang_length">
+      </div>
+    `,
+    pentagon: `
+      <div class="mb-3">
+        <label for="gc_clasp_length" class="form-label">GC Clasp Length</label>
+        <input type="number" class="form-control" id="gc_clasp_length" name="gc_clasp_length">
+      </div>
+      <div class="mb-3">
+        <label for="overhang_length" class="form-label">Overhang Length</label>
+        <input type="number" class="form-control" id="overhang_length" name="overhang_length">
+      </div>
+    `,
+    hexagon: `
+      <div class="mb-3">
+        <label for="gc_clasp_length" class="form-label">GC Clasp Length</label>
+        <input type="number" class="form-control" id="gc_clasp_length" name="gc_clasp_length">
+      </div>
+      <div class="mb-3">
+        <label for="overhang_length" class="form-label">Overhang Length</label>
+        <input type="number" class="form-control" id="overhang_length" name="overhang_length">
+      </div>
+    `,
+    "3wj": `
+      <div class="mb-3">
+        <label for="gc_clasp_length" class="form-label">GC Clasp Length</label>
+        <input type="number" class="form-control" id="gc_clasp_length" name="gc_clasp_length">
+      </div>
+    `
+  };
+
+  document.getElementById("shape").addEventListener("change", function () {
+    const selected = this.value;
+    document.getElementById("shape-params").innerHTML = shapeParams[selected] || "";
+  });
+</script>
+
+</body>
+</html>

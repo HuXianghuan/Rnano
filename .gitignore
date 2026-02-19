@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+rnano_env/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Task outputs
+tasks/
+
+# Logs
+*.log
+*.tmp
+
+# Data files
+*.csv
+*.json
+*.txt
