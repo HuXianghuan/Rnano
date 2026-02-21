@@ -60,8 +60,6 @@ rnano_env\Scripts\activate    # Windows
 
 3. **Install dependencies**
 ```bash
-pip install -r requirements.txt  # If requirements.txt exists
-# Or manually install:
 pip install viennarna
 ```
 
